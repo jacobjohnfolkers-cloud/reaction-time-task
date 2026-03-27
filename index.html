@@ -4,37 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reaction Time Task</title>
-    <style>
-        body { display: flex; justify-content: center; align-items: center; height: 100vh; font-family: Arial, sans-serif; }
-        #reaction-time { font-size: 2rem; }
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div id="reaction-time">
-        Click when the background color changes!
-    </div>
+    <h1>Reaction Time Task</h1>
+    <button id="start-button">Start</button>
+    <p id="reaction-time"></p>
+    <canvas id="myChart" width="400" height="200"></canvas>
     <script>
-        let startTime;
-        const display = document.getElementById('reaction-time');
+        let reactionTimes = [];
+        let historicalData = [300, 350, 400, 380, 330, 360]; // Example historical data
 
-        function changeColor() {
-            document.body.style.backgroundColor = 'blue';
-            startTime = new Date();
-            display.textContent = 'Click now!';
+        function startTask() {
+            document.getElementById('reaction-time').innerHTML = '';
+            const randomDelay = Math.random() * 2000 + 1000;
+            setTimeout(() => {
+                alert('Click!');
+                const reactionTime = Date.now() - start;
+                reactionTimes.push(reactionTime);
+                document.getElementById('reaction-time').innerHTML = `Your reaction time: ${reactionTime} ms`;
+                updateChart();
+            }, randomDelay);
         }
 
-        function reset() {
-            document.body.style.backgroundColor = 'white';
-            display.textContent = 'Click when the background color changes!';
-        }
+        document.getElementById('start-button').addEventListener('click', startTask);
 
-        setTimeout(changeColor, Math.random() * 4000 + 1000);
-        display.addEventListener('click', function() {
-            const endTime = new Date();
-            const reactionTime = endTime - startTime;
-            display.textContent = `Your reaction time: ${reactionTime} ms`;
-            setTimeout(reset, 2000);
-        });
+        function updateChart() {
+            const ctx = document.getElementById('myChart').getContext('2d');
+            const myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Your Reaction Times', 'Historical Data'],
+                    datasets: [{
+                        label: 'Reaction Times (ms)',
+                        data: [...reactionTimes, ...historicalData],
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
     </script>
 </body>
 </html>
