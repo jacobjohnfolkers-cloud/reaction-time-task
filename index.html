@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reaction Time Task</title>
+    <style>
+        body { display: flex; justify-content: center; align-items: center; height: 100vh; font-family: Arial, sans-serif; }
+        #reaction-time { font-size: 2rem; }
+    </style>
+</head>
+<body>
+    <div id="reaction-time">
+        Click when the background color changes!
+    </div>
+    <script>
+        let startTime;
+        const display = document.getElementById('reaction-time');
+
+        function changeColor() {
+            document.body.style.backgroundColor = 'blue';
+            startTime = new Date();
+            display.textContent = 'Click now!';
+        }
+
+        function reset() {
+            document.body.style.backgroundColor = 'white';
+            display.textContent = 'Click when the background color changes!';
+        }
+
+        setTimeout(changeColor, Math.random() * 4000 + 1000);
+        display.addEventListener('click', function() {
+            const endTime = new Date();
+            const reactionTime = endTime - startTime;
+            display.textContent = `Your reaction time: ${reactionTime} ms`;
+            setTimeout(reset, 2000);
+        });
+    </script>
+</body>
+</html>
